@@ -1,0 +1,103 @@
+{% extends '@admin/layout.twig' %}
+
+{% block title trans('affiliate.admin.withdrawals.title') %}
+{% block pagetitle trans('affiliate.admin.withdrawals.title') %}
+{% block pagesubtitle trans('affiliate.admin.withdrawals.subtitle') %}
+
+{% block body %}
+
+    <div class="col-12">
+        <div class="callout callout-danger alert-dismissible">
+            {{ trans("affiliate.admin.withdrawals.warning") | raw }}
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex bd-highlight mb-3 justify-content-between">
+                <div class="p-2 bd-highlight">
+
+                    <form method="GET" class="form-inline mb-3 mr-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="{{ trans("search") }}" name="s"
+                                   value="{{ query }}">
+                        </div>
+
+
+                        <button type="submit" class="btn btn-info" title="{{ trans("search") }}"><i
+                                    class="fas fa-search"></i></button>
+                    </form>
+
+                </div>
+                <div class="p-2 bd-highlight">
+                    <a href="?order={{ order == 'desc' ? 'asc' : 'desc' }}" class="btn btn-dark"><i
+                                class="fas fa-caret-{{ order == 'desc' ? 'down' : 'up' }}"></i></a>
+
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th>{{ trans("user") }}</th>
+
+                        <th>{{ trans("state") }}</th>
+                        <th>{{ trans("amount") }}</th>
+                        <th>{{ trans("date") }}</th>
+                        <th>{{ trans("action") }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if items is not empty %}
+                        {% set token = csrf_input() %}
+                        {% for item in items %}
+                            <tr>
+                                <td>#{{ item.id }}</td>
+
+                                <td>
+                                    <a href="{{ path('account.admin.edit', {id: item.userId}) }}">{{ item.username }}</a>
+                                </td>
+                                <td>{{ item.state }}</td>
+                                <td>{{ item.amount | formatted_price(true, '0') }}</td>
+                                <td>{{ item.createdAt | formatted_date('d/m/y H:i:s') }}</td>
+                                <td>
+                                    {% if item.state == 'PENDING' %}
+                                    <form method="POST" action="{{ path('admin.affiliate.makewithdrawals', {id: item.id}) }}">
+                                        {{ csrf_input() }}
+                                        <button class="btn btn-success mr-2" name="accept_auto" title="Accept add withdrawal in wallet">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </button>
+
+                                        <button class="btn btn-danger mr-2" name="refuse" title="Refuse and cancel withdrawal">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+
+                                        <button class="btn btn-info mr-2" name="accept_manu" title="Accept and manually send withdrawal">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7">{{ trans("no_record") }}</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+
+                {% if query is defined %}
+                    {{ paginate(items, 'admin.affiliate.withdrawals',{state:searchState}, {'query':query}) }}
+                {% endif %}
+                {% if query is not defined %}
+                    {{ paginate(items, 'admin.affiliate.withdrawals') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

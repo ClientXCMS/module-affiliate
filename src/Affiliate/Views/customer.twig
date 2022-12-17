@@ -1,0 +1,131 @@
+<div class="row">
+    <div class="col-md-4 col-sm-4">
+        <div class="card" {% if items | length > 5 %}style="
+    height:350px;
+    overflow:scroll;
+    overflow-x:hidden;
+"{% endif %}>
+            <div class="card-body">
+                <h4><i class="fas fa-users mr-2"></i> {{ trans("affiliate.admin.users.title2") }}
+                </h4>
+                <div class="table-responsive">
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{{ trans("username") }}</th>
+                            <th>{{ trans("date") }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if items is not empty %}
+                            {% for item in items %}
+                                <tr>
+                                    <td>{{ item.id }}</td>
+
+                                    <td>
+                                        <a href="{{ path('account.admin.edit', {id: item.targetId}) }}">{{ item.username }}</a>
+                                    </td>
+                                    <td>{{ item.createdAt | formatted_date('Y/m/d H:i') }}</td>
+
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8">{{ trans("no_record") }}</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-4">
+        <div class="card" {% if logs | length > 5 %}style="
+    height:350px;
+    overflow:scroll;
+    overflow-x:hidden;
+"{% endif %}>
+            <div class="card-body">
+                <h4><i class="fas fa-file mr-2"></i> {{ trans("affiliate.admin.logs.title") }}
+                </h4>
+                <div class="table-responsive">
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+
+                            <th>{{ trans("affiliate.client.description") }}</th>
+                            <th>{{ trans("amount") }}</th>
+                            <th>{{ trans("date") }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if logs is not empty %}
+                            {% for item in logs %}
+                                <tr>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.description }}</td>
+                                    <td>{{ item.amount | formatted_price(true, '0') }}</td>
+                                    <td>{{ item.createdAt | formatted_date('d/m/y H:i:s') }}</td>
+
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8">{{ trans("no_record") }}</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-4">
+        <div class="card" {% if withdrawals | length > 5 %}style="
+    height:350px;
+    overflow:scroll;
+    overflow-x:hidden;
+"{% endif %}>
+            <div class="card-body">
+                <h4><i class="fas fa-university mr-2"></i> {{ trans("affiliate.admin.withdrawals.title") }}
+                </h4>
+                <div class="table-responsive">
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{{ trans("state") }}</th>
+                            <th>{{ trans("amount") }}</th>
+                            <th>{{ trans("date") }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if withdrawals is not empty %}
+                            {% for item in withdrawals %}
+                                <tr>
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.state }}</td>
+                                    <td>{{ item.amount | formatted_price(true, '0') }}</td>
+                                    <td>{{ item.createdAt | formatted_date('d/m/y H:i:s') }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="8">{{ trans("no_record") }}</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

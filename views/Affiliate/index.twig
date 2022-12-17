@@ -1,0 +1,177 @@
+{% extends "layout.twig" %}
+{% set token = csrf_input() %}
+{% block title trans("affiliate.index") %}
+{% block body %}
+    {% if aff == null %}
+    <div class="row">
+        <div class="col-sm-12 col-md-8 col-lg-8">
+
+            <div class="card">
+                <div class="card-body">
+                    <h2>{{ trans("affiliate.client.title") }}</h2>
+                    <p>{{ trans("affiliate.client.subtitle") }}</p>
+                    <form method="POST">
+                        {{ csrf_input() }}
+                        <button class="btn btn-primary">{{ trans("affiliate.client.become") }}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="row">
+                {{ include('navigations/home', {items: items}) }}
+
+            </div>
+        </div>
+        </div>
+    {% else %}
+
+        <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="row">
+            {{ include('navigations/home', {items: items}) }}
+            </div>
+        </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-6">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <table class="table referral-commission-table">
+
+                                        <tr>
+                                            <td class="text-left">{{ trans("affiliate.client.lastwithdrawal") }}:</td>
+                                            <td><strong>Jamais</strong></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="text-left">{{ trans("affiliate.client.conversionrate") }}:</td>
+                                            <td><strong>{{ aff.conversionrate }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">{{ trans("affiliate.client.pendingcommission") }}:</td>
+                                            <td><strong>{{ aff.withdrawn | formatted_price(true, "0" ~ config('app.currency') | symbol_for) }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">{{ trans("affiliate.client.balance") }}:</td>
+                                            <td><strong>{{ aff.balance | formatted_price(true, "0" ~ config('app.currency') | symbol_for) }}</strong></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+
+                                            <h5>{{trans("affiliate.client.link")}}</h5>
+                                            <span>
+                                                {{ field("aff_link", path('affiliate.code', {token: aff.token}, true), null, {}, {disabled: 'true'}) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+
+                                <div class="card card-body">
+                                    <h5>{{trans("affiliate.client.requestawithdrawal")}}</h5>
+
+                                    <p>
+                                        {{ aff.withdrawn >= setting('affiliate_minwithdraw', "50") ? trans('affiliate.client.requestawithdrawaltrue') : trans('affiliate.client.requestawithdrawalfalse', {"%amount%": setting('affiliate_minwithdraw', 50) | formatted_price(true)}) }}
+                                    </p>
+                                    <form method="POST" action="{{ path('client.affiliate.withdraw') }}">
+                                        {{ csrf_input() }}
+                                        <button class="btn btn-primary {{ aff.withdrawn < setting('affiliate_minwithdraw', 50) ? 'disabled' : '' }}" type="submit"{{ aff.withdrawn < setting('affiliate_minwithdraw', 50) ? 'disabled="disabled"' : '' }}>
+                                            <i class="fas fa-university"></i> {{ trans("affiliate.client.requestawithdrawal") }}
+                                        </button>
+                                    </form>
+                                </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>{{ trans("affiliate.client.logstitle") }}</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ trans("affiliate.client.description") }}</th>
+                                                <th>{{ trans("amount") }}</th>
+                                                <th>{{ trans("date") }}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% if logs is not empty %}
+
+                                                {% for log in logs %}
+                                            <tr>
+
+                                                <th>{{ log.id }}</th>
+                                                <th>{{ log.description | html_decode }}</th>
+                                                <th>{{ log.amount | formatted_price(true,  "0" ~ config('app.currency') | symbol_for) }}</th>
+                                                <th>{{ log.createdAt | formatted_date() }}</th>
+                                            </tr>
+                                            {% endfor %}
+
+                                            {% else %}
+
+                                                <tr>
+                                                    <td colspan="10">{{ trans("no_record") }}</td>
+                                                </tr>
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>{{ trans("Historique des retraits") }}</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ trans("state") }}</th>
+                                                <th>{{ trans("amount") }}</th>
+                                                <th>{{ trans("date") }}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% if withdrawals is not empty %}
+                                            {% for withdrawal in withdrawals %}
+                                                <tr>
+
+                                                    <th>{{ withdrawal.id }}</th>
+                                                    <th>{{ withdrawal.state | capitalize }}</th>
+                                                    <th>{{ withdrawal.amount | formatted_price(true) }}</th>
+                                                    <th>{{ withdrawal.createdAt | formatted_date() }}</th>
+                                                </tr>
+                                            {% endfor %}
+                                            {% else %}
+
+                                                <tr>
+                                                    <td colspan="10">{{ trans("no_record") }}</td>
+                                                </tr>
+                                            {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    {% endif %}
+{% endblock %}

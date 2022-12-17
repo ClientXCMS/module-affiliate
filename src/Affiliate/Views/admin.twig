@@ -1,0 +1,35 @@
+
+{% if current_admin() is can('admin.affiliate.index') %}
+    <li class="nav-item has-treeview {{ is_subpath('admin.affiliate') ? 'menu-open' }}">
+        <a href="#" class="nav-link {{ is_subpath('admin.affiliate') ? 'active' }}">
+            <i class="nav-icon fas fa-user-tag"></i>
+            <p>
+                {{ trans("affiliate.index") }}
+                <i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview">
+
+            <li class="nav-item">
+                <a href="{{ path('admin.affiliate.users') }}" class="nav-link {{ is_subpath('admin.affiliate.users') ? 'active' }}">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>{{ trans("affiliate.admin.users.title") }}</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ path('admin.affiliate.withdrawals') }}" class="nav-link {{ is_subpath('admin.affiliate.withdrawals') ? 'active' }}">
+                    <i class="fas fa-university nav-icon"></i>
+                    <p>{{ trans("affiliate.admin.withdrawals.title") }}</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ path('admin.affiliate.logs') }}" class="nav-link {{ is_subpath('admin.affiliate.logs') ? 'active' }}">
+                    <i class="fas fa-file nav-icon"></i>
+                    <p>{{ trans("affiliate.admin.logs.title") }}</p>
+                </a>
+            </li>
+        </ul>
+    </li>
+{% endif %}

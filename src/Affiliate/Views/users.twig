@@ -1,0 +1,83 @@
+{% extends '@admin/layout.twig' %}
+
+{% block title trans('affiliate.admin.users.title') %}
+{% block pagetitle trans('affiliate.admin.users.title') %}
+{% block pagesubtitle trans('affiliate.admin.users.subtitle') %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex bd-highlight mb-3 justify-content-between">
+                <div class="p-2 bd-highlight">
+
+                    <form method="GET" class="form-inline mb-3 mr-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="{{ trans("search") }}" name="s"
+                                   value="{{ query }}">
+                        </div>
+
+
+                        <button type="submit" class="btn btn-info" title="{{ trans("search") }}"><i
+                                    class="fas fa-search"></i></button>
+                    </form>
+
+                </div>
+                <div class="p-2 bd-highlight">
+                        <a href="?order={{ order == 'desc' ? 'asc' : 'desc' }}" class="btn btn-dark"><i
+                                    class="fas fa-caret-{{ order == 'desc' ? 'down' : 'up' }}"></i></a>
+
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th>{{ trans("user") }}</th>
+
+                        <th>{{ trans("affiliate.client.visitors") }}</th>
+                        <th>{{ trans("affiliate.client.signups") }}</th>
+                        <th>{{ trans("affiliate.client.balance") }}</th>
+                        <th>{{ trans("affiliate.client.pendingcommission") }}</th>
+                        <th>{{ trans("date") }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if items is not empty %}
+                        {% set token = csrf_input() %}
+                        {% for item in items %}
+                            <tr>
+                                <td>#{{ item.id }}</td>
+
+                                <td>
+                                    <a href="{{ path('account.admin.edit', {id: item.userId}) }}">{{ item.username }}</a>
+                                </td>
+                                <td>{{ item.visitors }}</td>
+                                <td>{{ item.signups }}</td>
+                                <td>{{ item.balance | formatted_price(true, '0') }}</td>
+                                <td>{{ item.withdrawn | formatted_price(true, '0') }}</td>
+                                <td>{{ item.createdAt | formatted_date('d/m/y H:i:s') }}</td>
+
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7">{{ trans("no_record") }}</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+
+                    {% if query is defined %}
+                        {{ paginate(items, 'admin.affiliate.users',{state:searchState}, {'query':query}) }}
+                    {% endif %}
+                    {% if query is not defined %}
+                        {{ paginate(items, 'admin.affiliate.users') }}
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

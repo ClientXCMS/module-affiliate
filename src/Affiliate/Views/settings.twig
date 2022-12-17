@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-sm-12 col-md-6">
+        {{ field('affiliate_onorder', setting('affiliate_onorder', '0'), trans('affiliate.settings.onorder'), {type: 'number'}) }}
+    </div>
+
+    <div class="col-sm-12 col-md-6">
+        {{ field('affiliate_onregistration', setting('affiliate_onregistration', '0'), trans('affiliate.settings.onregistration'), {type: 'number'}) }}
+    </div>
+    <div class="col-sm-12 col-md-6">
+        {{ field('affiliate_onordertype', setting('affiliate_onordertype', '0'), trans('affiliate.settings.onordertype'), {options: types}) }}
+    </div>
+
+    <div class="col-sm-12 col-md-6">
+        {{ field('affiliate_minwithdraw', setting('affiliate_minwithdraw', '50'), trans('affiliate.settings.minwithdraw'), {type: 'number'}) }}
+    </div>
+</div>
