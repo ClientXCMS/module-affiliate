@@ -16,7 +16,7 @@ return [
     'admin.dashboard.items' => add(get(AffiliateWidget::class)),
     'admin.customer.items' => add(get(AffiliateCustomerItem::class)),
 
-    'navigation.main.items' => add(new DefaultMainItem(array(DefaultMainItem::makeItem("affiliate.index", "client.affiliate.index", "fas fa-user-tag")), 90)),
+    'navigation.main.items' => add(new DefaultMainItem(array(DefaultMainItem::makeItem("affiliate.index", "client.affiliate.index", "fas fa-user-tag", false, true)), 90)),
     App\Affiliate\AffiliateService::class => autowire()
         ->constructorParameter('onorder', setting('affiliate_onorder', '0'))
         ->constructorParameter('minwithdraw', setting('affiliate_minwithdraw', '50'))
