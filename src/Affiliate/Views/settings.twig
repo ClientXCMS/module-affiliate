@@ -13,4 +13,8 @@
     <div class="col-sm-12 col-md-6">
         {{ field('affiliate_minwithdraw', setting('affiliate_minwithdraw', '50'), trans('affiliate.settings.minwithdraw'), {type: 'number'}) }}
     </div>
+
+    <div class="col-sm-12 col-md-6">
+        {{ field('affiliate_redirecturl', setting('affiliate_redirecturl', '/store'), trans('affiliate.settings.redirecturl')) }}
+    </div>
 </div>

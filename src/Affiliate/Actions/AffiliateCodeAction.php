@@ -19,14 +19,16 @@ class AffiliateCodeAction extends Action
 {
 
     private AffiliateTable $affiliateTable;
+    private string $redirecturl;
 
-    public function __construct(Translater $translater,Router $router, FlashService $flash, AffiliateTable $affiliateTable, DatabaseUserAuth $auth)
+    public function __construct(Translater $translater,Router $router, FlashService $flash, AffiliateTable $affiliateTable, DatabaseUserAuth $auth, string $redirecturl)
     {
         $this->translater = $translater;
         $this->flash = $flash;
         $this->affiliateTable = $affiliateTable;
         $this->auth = $auth;
         $this->router = $router;
+        $this->redirecturl = $redirecturl;
     }
 
     public function __invoke(ServerRequestInterface $request)
@@ -38,9 +40,10 @@ class AffiliateCodeAction extends Action
 
             $aff->addVisitor();
             $this->affiliateTable->saveAff($aff);
-            return $this->redirectToRoute('account');
+            return $this->redirect($this->redirecturl);
+
         } catch (NoRecordException $e){
-            return $this->redirectToRoute('account');
+            return $this->redirect($this->redirecturl);
         }
         $this->success($this->trans("affiliate.client.success"));
         return $this->back($request);

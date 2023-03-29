@@ -39,6 +39,13 @@ class AffiliateService
         string $minwithdraw,
         string $currency
     ) {
+        
+        if (empty($onorder)){
+            $onorder = 0;
+        }
+        if (empty($onregistration)){
+            $onregistration = 0;
+        }
         $this->onorder = $onorder;
         $this->onordertype = $onordertype;
         $this->onregistration = $onregistration;
