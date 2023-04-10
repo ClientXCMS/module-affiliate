@@ -56,7 +56,7 @@
                                 <td>#{{ item.id }}</td>
 
                                 <td>
-                                    <a href="{{ path('account.admin.edit', {id: item.userId}) }}">{{ item.username }}</a>
+                                    <a href="{{ path('account.admin.edit', {id: item.userId}) }}">{{ item.username | html_decode }}</a>
                                 </td>
                                 <td>{{ item.state }}</td>
                                 <td>{{ item.amount | formatted_price(true, '0') }}</td>
