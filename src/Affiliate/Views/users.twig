@@ -41,6 +41,7 @@
                         <th>{{ trans("affiliate.client.balance") }}</th>
                         <th>{{ trans("affiliate.client.pendingcommission") }}</th>
                         <th>{{ trans("date") }}</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -58,7 +59,7 @@
                                 <td>{{ item.balance | formatted_price(true, '0') }}</td>
                                 <td>{{ item.withdrawn | formatted_price(true, '0') }}</td>
                                 <td>{{ item.createdAt | formatted_date('d/m/y H:i:s') }}</td>
-                                <td><button class="btn btn-primary" ></td>
+                                <td><a class="btn btn-primary" href="{{ path('affiliate.code', {token: aff.token}, true)}}" target="_blank"><i class="fas fa-maximize"></i></a></td>
 
                             </tr>
                         {% endfor %}
