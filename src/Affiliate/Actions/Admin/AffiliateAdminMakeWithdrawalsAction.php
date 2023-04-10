@@ -5,6 +5,8 @@ namespace App\Affiliate\Actions\Admin;
 use App\Affiliate\Database\AffiliateTable;
 use App\Affiliate\Database\AffiliateWithdrawalTable;
 use App\Affiliate\Entity\Affiliate;
+use ClientX\Session\FlashService;
+
 use App\Auth\Database\UserTable;
 use ClientX\Translator\Translater;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,12 +18,13 @@ class AffiliateAdminMakeWithdrawalsAction extends \ClientX\Actions\Action
     private AffiliateWithdrawalTable $affiliateWithdrawalTable;
     private UserTable $userTable;
 
-    public function __construct(AffiliateWithdrawalTable $affiliateWithdrawalTable,Translater $translater,AffiliateTable $affiliateTable, UserTable $userTable)
+    public function __construct(AffiliateWithdrawalTable $affiliateWithdrawalTable,Translater $translater, FlashService $flash,AffiliateTable $affiliateTable, UserTable $userTable)
     {
         $this->affiliateTable = $affiliateTable;
         $this->affiliateWithdrawalTable = $affiliateWithdrawalTable;
         $this->userTable = $userTable;
         $this->translater = $translater;
+        $this->flash = $flash;
     }
 
     public function __invoke(ServerRequestInterface $request)
@@ -40,9 +43,10 @@ class AffiliateAdminMakeWithdrawalsAction extends \ClientX\Actions\Action
             $user = $this->userTable->find($affiliate->getUserId());
             $user->addFund($withdrawal->amount);
             $this->userTable->updateWallet($user);
-            $this->affiliateWithdrawalTable->update($withdrawal->id,['state' => $state]);
             $this->affiliateTable->saveAff($affiliate);
         }
+        $this->affiliateWithdrawalTable->update($withdrawal->id,['state' => $state]);
+
         $this->success($this->trans("affiliate.admin.success"));
         return $this->back($request);
     }
