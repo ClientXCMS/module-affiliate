@@ -31,10 +31,13 @@ class AffiliateSignup
             } catch (NoRecordException $e){
                 return;
             }
-            $aff->addSignup($this->service->generateAmount('registration', 0));
-            $id = $this->service->addUserLog($user->getId(), $aff->getUserId());
-            $this->service->addRegistrationLog($user->getId(), $aff->getId(), $id);
-            $this->affiliateTable->saveAff($aff);
+            if (!$user->isSuspended()){
+
+                $aff->addSignup($this->service->generateAmount('registration', 0));
+                $id = $this->service->addUserLog($user->getId(), $aff->getUserId());
+                $this->service->addRegistrationLog($user->getId(), $aff->getId(), $id);
+                $this->affiliateTable->saveAff($aff);
+            }
 
         }
 
